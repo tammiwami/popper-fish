@@ -32,11 +32,11 @@ UI_FONT = pygame.font.SysFont("Arial", 24, bold=True)
 TITLE_FONT = pygame.font.SysFont("Arial", 40, bold=True)
 OCEAN_FONT = pygame.font.SysFont("Arial", 32, bold=True, italic=True)
 UI_PADDING = 15
-UI_BG_COLOR = (0, 20, 40, 180)  # Dark blue with transparency
-UI_BORDER_COLOR = (0, 150, 200)  # Ocean blue
+UI_BG_COLOR = (0, 20, 40, 180)  
+UI_BORDER_COLOR = (0, 150, 200) 
 HEALTH_COLOR = (255, 50, 50)
 ATTACK_BOOST_COLOR = (255, 215, 0)
-TEXT_COLOR = (200, 240, 255)  # Light blue-white
+TEXT_COLOR = (200, 240, 255)  
 BUBBLE_COLOR = (200, 240, 255, 100)
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -73,7 +73,7 @@ def load_image(name, width, height, default_color=None):
             surface.fill(default_color)
         return surface
 
-# Bubble images for decoration
+
 def create_bubble_surface(radius):
     bubble = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
     pygame.draw.circle(bubble, BUBBLE_COLOR, (radius, radius), radius)
@@ -143,16 +143,15 @@ class PowerUp:
         self.image_rect.center = self.rect.center
 
 def draw_ui_panel(surface, x, y, width, height):
-    # Create a wavy ocean-like panel
     panel = pygame.Surface((width, height), pygame.SRCALPHA)
     
-    # Draw main panel with gradient
+    
     for i in range(height):
         alpha = 180 - int(100 * (i/height))
         color = (0, 20 + int(30 * (i/height)), 40 + int(60 * (i/height)), alpha)
         pygame.draw.line(panel, color, (0, i), (width, i))
     
-    # Draw border with wave effect
+    
     border_points = []
     wave_height = 5
     for i in range(0, width + 1, 10):
@@ -160,7 +159,7 @@ def draw_ui_panel(surface, x, y, width, height):
         offset = wave_height * math.sin(progress * math.pi * 4)
         border_points.append((i, offset))
     
-    # Close the polygon
+    
     border_points.append((width, height))
     border_points.append((0, height))
     
@@ -168,7 +167,7 @@ def draw_ui_panel(surface, x, y, width, height):
         pygame.draw.polygon(panel, UI_BORDER_COLOR + (100,), border_points, 0)
         pygame.draw.lines(panel, UI_BORDER_COLOR, False, border_points[:-2], 2)
     
-    # Add some bubble decorations
+    
     panel.blit(BUBBLE_SMALL, (10, 15))
     panel.blit(BUBBLE_MEDIUM, (width - 25, 30))
     panel.blit(BUBBLE_SMALL, (width - 15, 10))
@@ -178,9 +177,9 @@ def draw_ui_panel(surface, x, y, width, height):
 def draw_health_bar(surface, x, y, current, max_health, width, height):
     ratio = current / max_health
     
-    # Draw ocean-themed health bar with gradient
+    
     for i in range(int(width * ratio)):
-        # Create a gradient from red to green through blue
+        
         if i < width * 0.3:
             r = 255
             g = int(255 * (i / (width * 0.3)))
@@ -194,18 +193,18 @@ def draw_health_bar(surface, x, y, current, max_health, width, height):
             g = int(255 * (1 - (i - width*0.6) / (width*0.4)))
             b = 255
         
-        # Ensure color values stay within 0-255 range
+        
         r = max(0, min(255, r))
         g = max(0, min(255, g))
         b = max(0, min(255, b))
         
         pygame.draw.rect(surface, (r, g, b), (x + i, y, 1, height))
     
-    # Draw coral-like border
+   
     border_rect = pygame.Rect(x, y, width, height)
     pygame.draw.rect(surface, UI_BORDER_COLOR, border_rect, 2, border_radius=3)
     
-    # Add bubble effect at the end of the health bar
+    
     if current > 0:
         bubble_pos = x + int(width * ratio) - 5
         surface.blit(BUBBLE_SMALL, (bubble_pos, y - 3)) 
@@ -213,12 +212,12 @@ def draw_health_bar(surface, x, y, current, max_health, width, height):
 def draw_attack_timer(surface, x, y, width, height, timer, max_time):
     if timer > 0:
         ratio = timer / max_time
-        # Gold gradient for attack boost
+        
         for i in range(int(width * ratio)):
             intensity = 150 + int(105 * (i / (width * ratio)))
             pygame.draw.rect(surface, (intensity, intensity//2, 0), (x + i, y, 1, height))
         
-        # Add sparkle effect
+       
         if random.random() < 0.1:
             sparkle_x = x + random.randint(0, int(width * ratio))
             sparkle_y = y + random.randint(0, height)
@@ -229,7 +228,7 @@ def draw_attack_timer(surface, x, y, width, height, timer, max_time):
 
 def draw_score_popup(surface, x, y, score, alpha):
     if alpha > 0:
-        # Create a bubble background for the score popup
+        
         bubble = pygame.Surface((60, 30), pygame.SRCALPHA)
         pygame.draw.ellipse(bubble, (0, 100, 150, alpha//2), (0, 0, 60, 30))
         pygame.draw.ellipse(bubble, (0, 200, 255, alpha//3), (0, 0, 60, 30), 2)
@@ -241,10 +240,10 @@ def draw_score_popup(surface, x, y, score, alpha):
         surface.blit(text, (x - text.get_width()//2, y - text.get_height()//2))
 
 def draw_game_over_screen(surface, score):
-    # Create an overlay with ocean waves effect
+    
     overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
     
-    # Gradient from surface to deep ocean
+   
     for y in range(HEIGHT):
         depth = y / HEIGHT
         r = int(10 * depth)
@@ -253,14 +252,14 @@ def draw_game_over_screen(surface, score):
         a = int(200 + 50 * depth)
         pygame.draw.line(overlay, (r, g, b, a), (0, y), (WIDTH, y))
     
-    # Add wave patterns
+    
     for wave_y in [HEIGHT//3, HEIGHT//2, HEIGHT//3*2]:
         for x in range(0, WIDTH, 5):
             offset = 5 * math.sin(x / 50 + time.time())
             pygame.draw.line(overlay, (0, 150, 200, 50), 
                            (x, wave_y + offset), (x + 5, wave_y + offset + 2), 2)
     
-    # Add bubbles
+   
     for _ in range(20):
         bubble_x = random.randint(0, WIDTH)
         bubble_y = random.randint(0, HEIGHT)
@@ -269,27 +268,27 @@ def draw_game_over_screen(surface, score):
     
     surface.blit(overlay, (0, 0))
     
-    # Create a central panel
+    
     panel_width, panel_height = 500, 300
     panel_x, panel_y = WIDTH//2 - panel_width//2, HEIGHT//2 - panel_height//2
     draw_ui_panel(surface, panel_x, panel_y, panel_width, panel_height)
     
-    # Game over text with wave effect
+   
     game_over_text = TITLE_FONT.render("GAME OVER", True, (255, 100, 100))
     text_x = WIDTH//2 - game_over_text.get_width()//2
     text_y = HEIGHT//2 - 80
     
-    # Add wave distortion to text
+    
     for i in range(0, game_over_text.get_width(), 2):
         offset = 3 * math.sin(i / 20 + time.time() * 2)
         surface.blit(game_over_text.subsurface((i, 0, 2, game_over_text.get_height())), 
                    (text_x + i, text_y + offset))
     
-    # Score display with bubble
+    
     score_text = OCEAN_FONT.render(f"Your Score: {score}", True, TEXT_COLOR)
     score_rect = score_text.get_rect(center=(WIDTH//2, HEIGHT//2))
     
-    # Bubble behind score
+    
     bubble_size = max(score_text.get_width() + 40, score_text.get_height() + 30)
     bubble = pygame.Surface((bubble_size, bubble_size), pygame.SRCALPHA)
     pygame.draw.ellipse(bubble, (0, 50, 100, 150), (0, 0, bubble_size, bubble_size))
@@ -298,30 +297,30 @@ def draw_game_over_screen(surface, score):
     
     surface.blit(score_text, score_rect)
     
-    # Restart prompt with pulsing effect
+    
     pulse = int(10 * abs(math.sin(time.time() * 2)))
     restart_text = UI_FONT.render("Press any key to quit", True, 
                                 (200 + pulse, 240 + pulse, 255))
     restart_rect = restart_text.get_rect(center=(WIDTH//2, HEIGHT//2 + 100))
     surface.blit(restart_text, restart_rect)
     
-    # Add some decorative fish silhouettes
+    
     fish_silhouette = pygame.Surface((100, 40), pygame.SRCALPHA)
     pygame.draw.ellipse(fish_silhouette, (0, 50, 100, 50), (0, 0, 80, 40))
     pygame.draw.polygon(fish_silhouette, (0, 50, 100, 50), 
                        [(80, 20), (100, 10), (100, 30)])
     
-    # Left fish
+    
     left_fish = pygame.transform.flip(fish_silhouette, True, False)
     surface.blit(left_fish, (panel_x - 120, panel_y + 50))
     
-    # Right fish
+    
     surface.blit(fish_silhouette, (panel_x + panel_width + 20, panel_y + 100))
 
 def draw(surface, player, elapsed_time, fishes, bullets, powerups, score, player_health, attack_power, attack_timer, score_popups):
     surface.blit(BG, (0, 0))
     
-    # Draw game objects
+    
     surface.blit(player_img, player)
     for fish in fishes:
         surface.blit(fish.image, fish.image_rect)
@@ -331,10 +330,10 @@ def draw(surface, player, elapsed_time, fishes, bullets, powerups, score, player
     for powerup in powerups:
         surface.blit(powerup.image, powerup.image_rect)
     
-    # Draw UI panel
+    
     draw_ui_panel(surface, 10, 10, 250, 120)
     
-    # Draw UI text
+    
     time_text = UI_FONT.render(f"TIME: {round(elapsed_time)}s", True, TEXT_COLOR)
     score_text = UI_FONT.render(f"SCORE: {score}", True, TEXT_COLOR)
     health_text = UI_FONT.render("HEALTH:", True, TEXT_COLOR)
@@ -346,11 +345,11 @@ def draw(surface, player, elapsed_time, fishes, bullets, powerups, score, player
     surface.blit(health_text, (25, 65))
     surface.blit(attack_text, (25, 90))
     
-    # Draw health and attack bars
+    
     draw_health_bar(surface, 130, 70, player_health, PLAYER_MAX_HEALTH, 120, 16)
     draw_attack_timer(surface, 150, 115, 150, 10, attack_timer, 5000)
     
-    # Draw score popups
+    
     for popup in score_popups[:]:
         draw_score_popup(surface, popup['x'], popup['y'], popup['score'], popup['alpha'])
         popup['y'] -= 1
@@ -364,20 +363,20 @@ def main():
     clock = pygame.time.Clock()
     start_time = time.time()
     
-    # Game state
+    
     score = 0
     player_health = PLAYER_MAX_HEALTH
     attack_power = 1
     attack_timer = 0
     score_popups = []
     
-    # Spawn timers
+    
     fish_add_increment = 2000
     fish_count = 0
     powerup_add_increment = 5000
     powerup_count = 0
     
-    # Game objects
+    
     fishes = []
     bullets = []
     powerups = []
@@ -390,13 +389,13 @@ def main():
         powerup_count += delta_time
         elapsed_time = time.time() - start_time
         
-        # Handle attack power timer
+        
         if attack_timer > 0:
             attack_timer -= delta_time
             if attack_timer <= 0:
                 attack_power = 1
 
-        # Spawn fish
+        
         if fish_count >= fish_add_increment:
             for _ in range(3):
                 fish_type = random.choice(list(FishType))
@@ -411,7 +410,7 @@ def main():
             fish_add_increment = max(1000, fish_add_increment - 50)
             fish_count = 0
 
-        # Spawn powerups
+        
         if powerup_count >= powerup_add_increment:
             powerup_type = random.choice(list(PowerUpType))
             width, height = powerup_sizes[powerup_type]
@@ -419,7 +418,7 @@ def main():
             powerups.append(PowerUp(powerup_x, -height))
             powerup_count = 0
 
-        # Event handling
+       
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -432,32 +431,32 @@ def main():
                 )
                 bullets.append(bullet)
 
-        # Player movement
+      
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and player.x - PLAYER_VELOCITY >= 0:
             player.x -= PLAYER_VELOCITY
         if keys[pygame.K_d] and player.x + PLAYER_VELOCITY + player.width <= WIDTH:
             player.x += PLAYER_VELOCITY
 
-        # Update bullets
+       
         for bullet in bullets[:]:
             bullet.y -= BULLET_VELOCITY
             if bullet.y < 0:
                 bullets.remove(bullet)
 
-        # Update fishes
+        
         for fish in fishes[:]:
             fish.update()
             if fish.rect.y > HEIGHT:
                 fishes.remove(fish)
 
-        # Update powerups
+        
         for powerup in powerups[:]:
             powerup.update()
             if powerup.rect.y > HEIGHT:
                 powerups.remove(powerup)
 
-        # Collision detection
+        
         for bullet in bullets[:]:
             for fish in fishes[:]:
                 if bullet.colliderect(fish.rect):
@@ -476,7 +475,7 @@ def main():
                         fishes.remove(fish)
                     break
 
-        # Player-fish collision
+        
         for fish in fishes[:]:
             if fish.rect.colliderect(player):
                 fishes.remove(fish)
@@ -484,7 +483,7 @@ def main():
                 if player_health <= 0:
                     running = False
 
-        # Player-powerup collision
+       
         for powerup in powerups[:]:
             if powerup.rect.colliderect(player):
                 powerups.remove(powerup)
@@ -494,21 +493,21 @@ def main():
                 elif powerup.type in [PowerUpType.SEAWEED, PowerUpType.ALGAE]:
                     player_health = min(PLAYER_MAX_HEALTH, player_health + 20)
 
-        # Draw everything
+    
         draw(WIN, player, elapsed_time, fishes, bullets, powerups, score, 
             player_health, attack_power, attack_timer, score_popups)
 
-    # Game over screen
+  
     draw_game_over_screen(WIN, score)
     pygame.display.update()
     
-    # Wait for user input to quit
+ 
     waiting = True
     while waiting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
                 waiting = False
-        # Animate the game over screen while waiting
+       
         draw_game_over_screen(WIN, score)
         pygame.display.update()
         clock.tick(60)
