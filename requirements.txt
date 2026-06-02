@@ -1,0 +1,2 @@
+pygame-ce; python_version >= "3.14"
+pygame; python_version < "3.14"
