@@ -61,13 +61,6 @@ Space   Shoot
 
 The start/menu screen includes Settings, where you can change the movement/shoot keys and adjust music volume.
 
-## Screens And Flow
-
-1. Splash screen with the game logo.
-2. Start panel with instructions.
-3. Main gameplay.
-4. In-game Menu button for pausing and checking instructions/settings.
-5. Game-over leaderboard with Play Again and Exit options.
 
 ## Project Structure
 
@@ -84,19 +77,4 @@ src/entities/            Fish and powerup classes
 src/utils/helpers.py     Asset loading and audio helpers
 ```
 
-## Audio And Assets
 
-The game uses:
-
-- `assets/Brave New Ocean Loopable.ogg` for looping background music
-- `assets/game_over_bad_chest.wav` for the game-over sound
-- `assets/images/logo.png` for the splash and menu logo
-- Other image files in `assets/images/` for the player, fish, bullets, powerups, and backgrounds
-
-Keep asset filenames unchanged unless you also update their references in the code.
-
-## Notes
-
-- If the game window opens and stays open, the program is running correctly.
-- If audio does not play, check your system audio device and make sure the `.ogg` and `.wav` files are still in `assets/`.
-- If `python` opens the Microsoft Store on Windows, use `py` instead.
